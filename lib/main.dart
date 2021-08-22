@@ -8,10 +8,10 @@ void main() async {
 
   runApp(EasyLocalization(
     child: MyApp(),
-    supportedLocales: [Locale('en', 'US'), Locale('ar', 'DZ')],
+    supportedLocales: [Locale('ja', 'JP'), Locale('en', 'US')],
     path: 'assets/langs',
-    fallbackLocale: Locale('en', 'US'),
-//    saveLocale: false,
+    fallbackLocale: Locale('ja', 'JP'),
+    saveLocale: false,
   ));
 }
 
@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
     final _ezContext = EasyLocalization.of(context)!;
     return MaterialApp(
       title: 'Change Lang App',
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -44,33 +45,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _switchLang(Locale locale) async {
-    await context.setLocale(locale);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Center(
-        child: Column(
-          children: [
-            TextButton(
-              //supportedLocalesをcontextからとってこれる
-              onPressed: () => _switchLang(context.supportedLocales[0]),
-              child: Text('en'),
-            ),
-            TextButton(
-              onPressed: () => _switchLang(context.supportedLocales[1]),
-              child: Text('ar'),
-            ),
-            const SizedBox(height: 100),
-            Text(tr('title')),
-            //context.localeで現在のlocaleが取得できる
-            Text(context.locale.toString())
-          ],
-        ),
+      appBar: AppBar(title: Text(widget.title, style: TextStyle(fontSize: 20))),
+      body: _body(context),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    final supportLocales = context.supportedLocales;
+    final currentLocale = context.locale;
+    return Center(
+      child: Column(
+        children: [
+          Row(
+              mainAxisSize: MainAxisSize.min,
+              children: supportLocales
+                  .map((locale) => _btn(locale, currentLocale))
+                  .toList()),
+          const SizedBox(height: 20),
+          Text(tr('lang_name'), style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 4),
+          //context.localeで現在のlocaleが取得できる
+          Text(context.locale.toString(), style: TextStyle(fontSize: 16))
+        ],
       ),
+    );
+  }
+
+  Widget _btn(Locale locale, Locale currentLocale) {
+    final isActive = locale.languageCode == currentLocale.languageCode;
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              primary: isActive
+                  ? Theme.of(context).accentColor
+                  : Theme.of(context).disabledColor),
+          onPressed: () => context.setLocale(locale),
+          child: Text(locale.languageCode)),
     );
   }
 }
