@@ -30,25 +30,18 @@ class MyApp extends StatelessWidget {
       supportedLocales: _ezContext.supportedLocales,
       locale: _ezContext.locale,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MyHomePage(title: 'Change Lang App'),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class MyHomePage extends StatelessWidget {
+  const MyHomePage();
 
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title, style: TextStyle(fontSize: 20))),
+      appBar: AppBar(title: Text(tr('title'), style: TextStyle(fontSize: 20))),
       body: _body(context),
     );
   }
@@ -62,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
               mainAxisSize: MainAxisSize.min,
               children: supportLocales
-                  .map((locale) => _btn(locale, currentLocale))
+                  .map((locale) => _btn(context, locale, currentLocale))
                   .toList()),
           const SizedBox(height: 20),
           Text(tr('lang_name'), style: TextStyle(fontSize: 16)),
@@ -74,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _btn(Locale locale, Locale currentLocale) {
+  Widget _btn(BuildContext context, Locale locale, Locale currentLocale) {
     final isActive = locale.languageCode == currentLocale.languageCode;
     return Padding(
       padding: const EdgeInsets.all(8),
