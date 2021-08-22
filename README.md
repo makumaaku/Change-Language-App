@@ -13,5 +13,7 @@
 ## 使用したパッケージ
 [easy_localization: ^3.0.0](https://pub.dev/packages/easy_localization)
 
+<img width="307" alt="スクリーンショット 2021-08-22 18 23 08" src="https://user-images.githubusercontent.com/62736140/130349790-6fa7c8d4-e970-43f3-b080-2047d1546895.png">
+
 
 
